@@ -66,20 +66,20 @@ class Analyzer:
         timesteps = np.arange(len(pred_data))
         fig, ax1 = plt.subplots(figsize=(12, 5))
 
+        line1, = ax1.plot(timesteps, pred_data[:, 0], label="CPU", color="red")
         ax1.set_xlabel("Time")
-        ax1.set_ylabel("CPU (%)", color="tab:blue")
-        ax1.plot(timesteps, pred_data[:, 0], label="CPU", color="tab:blue")
-        ax1.tick_params(axis='y', labelcolor="tab:blue")
-        ax1.grid(True)
+        ax1.set_ylabel("CPU (%)", color="red")
+        ax1.tick_params(axis="y", labelcolor="red")
 
         ax2 = ax1.twinx()
-        ax2.set_ylabel("Memory (MB)", color="tab:red")
-        ax2.plot(timesteps, pred_data[:, 1], label="Memory", color="tab:red")
-        ax2.tick_params(axis='y', labelcolor="tab:red")
+        ax2.set_ylabel("Memory (MB)", color="blue")
+        line2, = ax2.plot(timesteps, pred_data[:, 1], label="Memory", color="blue")
+        ax2.tick_params(axis="y", labelcolor="blue")
 
-        lines, labels = ax1.get_legend_handles_labels()
-        lines2, labels2 = ax2.get_legend_handles_labels()
-        ax1.legend(lines + lines2, labels + labels2, loc="upper left")
+        ax1.set_yticks(np.linspace(ax1.get_ylim()[0], ax1.get_ylim()[1], 5))
+        ax2.set_yticks(np.linspace(ax2.get_ylim()[0], ax2.get_ylim()[1], 5))
+        ax1.grid(linestyle="--")
 
-        fig.tight_layout()
-        plt.show()
+        lines = [line1, line2]
+        labels = [line.get_label() for line in lines]
+        ax1.legend(lines, labels)

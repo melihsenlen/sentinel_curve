@@ -33,7 +33,6 @@ A resource monitoring & prediction tool that collects CPU/memory usage, feeds it
     ```
 
 3. Open <code>notebooks/exploration.ipynb</code>:
-    - Modify parameters such as: <code>LR</code> & <code>BATCH_SIZE</code> to experiment.
     - Run cells sequentially to train the model and see predicted CPU/memory trends
 
 ## Arguments
