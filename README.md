@@ -1,42 +1,54 @@
 # sentinel_curve
-A resource monitoring & prediction tool that collects CPU/memory usage, feeds it into a <a href="https://pytorch.org/">PyTorch</a> regression model that predicts future resource usage interactively.
+A Windows resource monitoring and prediction tool. Collects real-time CPU and memory usage via C++, feeds it into a <a href="https://pytorch.org/">PyTorch</a> LSTM regression model, and forecasts future resource trends.
 
 ## Features
-- Real-time CPU and memory monitoring via C++ (Windows)
-- Time-series regression using LSTM in Python (PyTorch)
-- Interactive predictions and plots in Jupyter Notebook
-- Comes with a Batch file to make things easier
+- Real-time CPU & memory monitoring via C++ on Windows
+- LSTM regression model trained on collected time-series data
+- Autoregressive future rollout with configurable steps and noise
+- Seperate pipeline for the monitor & the training and inference loop
+- Jupyter notebook for visualizing fitted & forecasted trends
 
 ## Prequisites
 - Windows
 - C++ compiler
-- Python 3.10+
-- Torch
-- Pandas
-- Numpy
-- Matplotlib
-- Scikit-learn
-- Ipywidgets
-- Ipython
+- Python 3.10+ 
 
 ## Usage
 1. Run the pipeline:
-    ```bash
-    cd pipeline
-    run.bat
-    ```
-    This will create <code>data/data.csv</code> containing CPU (%) and memory (MB) usage.
+    -   ```bash
+        cd pipeline
+        run.bat
+        ```
+    - This will create <code>data/data.csv</code> containing CPU (%) and memory (MB) usage.
+    - Check out the [Arguments](#arguments)
 
 2. Install requirements:
-    ```bash
-    pip install -r requirements.txt
-    ```
+    -   ```bash
+        pip install -r requirements.txt
+        ```
+    - <b>contains:</b>
+        - Torch
+        - Pandas
+        - Numpy
+        - Matplotlib
+        - Scikit-learn
+        - Pyyaml
 
-3. Open <code>notebooks/exploration.ipynb</code>:
-    - Run cells sequentially to train the model and see predicted CPU/memory trends
+3. Train the model & infer the results:
+    - Model and inference parameters are located in <code>config.yaml</code>
+
+    -   ```bash
+        python -m pipeline.run
+        ```
+    - This will create <code>output/</code> which includes <code>model.pt</code> & <code>predictions.csv</code>
+
+4. You can view your own results in <code>analysis.ipynb</code>:
+
+    <img src="assets/example.png" width="500">
+
 
 ## Arguments
-You can customize how the monitor runs by passing arguments to the batch script:
+You can customize how the monitor runs by passing arguments to <code>pipeline/monitor.bat</code>:
 
 | Argument  | Default | Description |
 |-----------|---------|-------------|

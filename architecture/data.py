@@ -8,13 +8,13 @@ class DataReader:
         self.window_size = window_size
         self.scaler = MinMaxScaler()
 
-    def read(self):
+    def read(self) -> np.ndarray:
         df = pd.read_csv(self.csv_path)
         df = df[["cpu_percent", "mem_mb"]]
         scaled = self.scaler.fit_transform(df)
         return scaled
 
-    def create_sequences(self):
+    def create_sequences(self) -> tuple[np.ndarray, np.ndarray]:
         data = self.read()
         X, y = [], []
         for i in range(len(data) - self.window_size):

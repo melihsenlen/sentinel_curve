@@ -2,5 +2,5 @@ __pycache__/
 *.pyc
 
 build/
-models/
+output/
 data.csv
