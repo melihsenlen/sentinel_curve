@@ -17,7 +17,7 @@ A Windows resource monitoring and prediction tool. Collects real-time CPU and me
 1. Run the pipeline:
     -   ```bash
         cd pipeline
-        run.bat
+        monitor.bat
         ```
     - This will create <code>data/data.csv</code> containing CPU (%) and memory (MB) usage.
     - Check out the [Arguments](#arguments)

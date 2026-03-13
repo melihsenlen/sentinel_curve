@@ -10,7 +10,10 @@ from architecture.model import RegressionModel
 class Trainer:
     def __init__(self, config_path: str):
         self.config = self._load(config_path)
-        self.reader = DataReader(self.config["data"]["csv_path"], self.config["data"]["window_size"])
+        csv_path = self.config["data"]["csv_path"]
+        print(f"Reading: {csv_path}")
+
+        self.reader = DataReader(csv_path, self.config["data"]["window_size"])
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = RegressionModel(input_size=2).to(self.device)
 
