@@ -8,7 +8,7 @@ A Windows resource monitoring and prediction tool. Collects real-time CPU and me
 - Seperate pipeline for the monitor & the training and inference loop
 - Jupyter notebook for visualizing fitted & forecasted trends
 
-## Prequisites
+## Prerequisites
 - Windows
 - C++ compiler
 - Python 3.10+ 
