@@ -1,5 +1,5 @@
 data:
-  csv_path: "data/sample.csv"
+  csv_path: "data/data.csv"
   window_size: 5 # number of past time steps to use for prediction
 
 training:
