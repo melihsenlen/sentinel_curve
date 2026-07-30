@@ -1,9 +1,9 @@
 data:
-  csv_path: "data/data.csv"
+  csv_path: "data/sample.csv"
   window_size: 5 # number of past time steps to use for prediction
 
 training:
-  batch_size: 16
+  batch_size: 32
   epochs: 50
   lr: 0.001
 

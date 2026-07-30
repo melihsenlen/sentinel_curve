@@ -35,6 +35,7 @@ EXIT /B 1
 REM
 IF NOT EXIST "%SCRIPT_DIR%..\monitor\build" (
     mkdir "%SCRIPT_DIR%..\monitor\build"
+    echo It might take some time to build the monitor.
 )
 
 REM

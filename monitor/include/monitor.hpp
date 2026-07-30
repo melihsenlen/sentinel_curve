@@ -8,11 +8,11 @@ namespace sentinel {
 
 struct Sample {
     std::uint64_t timestamp;
-    double cpu_percent;
-    double mem_mb;
+    double cpu;
+    double memory;
 };
 
-Sample collect_sample();
+Sample collectSample();
 std::string to_csv(const Sample& sample);
 }
 

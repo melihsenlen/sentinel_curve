@@ -3,14 +3,14 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
 class DataReader: 
-    def __init__(self, csv_path, window_size=5):
-        self.csv_path = csv_path
-        self.window_size = window_size
+    def __init__(self, data: dict):
+        self.csv_path = data["csv_path"]
+        self.window_size = data["window_size"]
         self.scaler = MinMaxScaler()
 
     def read(self) -> np.ndarray:
         df = pd.read_csv(self.csv_path)
-        df = df[["cpu_percent", "mem_mb"]]
+        df = df[["cpu", "memory"]]
         scaled = self.scaler.fit_transform(df)
         return scaled
 

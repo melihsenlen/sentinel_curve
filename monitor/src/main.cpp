@@ -28,24 +28,31 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    out << "timestamp,cpu_percent,mem_mb\n";
+    out << "timestamp,cpu,memory\n";
     out.flush();
 
     int elapsed = 0;
     while (duration_sec < 0 || elapsed < duration_sec) {
-        sentinel::Sample s = sentinel::collect_sample();
+        sentinel::Sample s = sentinel::collectSample();
 
         out << sentinel::to_csv(s) << "\n";
         out.flush();
 
-        std::cout << "Timestamp: " << s.timestamp
-            << " | CPU: " << s.cpu_percent << "%"
-            << " | Memory: " << s.mem_mb << " MB"
+        std::cout 
+            << "Timestamp: " << s.timestamp
+            << " | CPU: "    << s.cpu << "%"
+            << " | Memory: " << s.memory << " MB"
             << std::endl;
 
         std::this_thread::sleep_for(std::chrono::seconds(interval_sec));
         if (duration_sec > 0) elapsed += interval_sec;
     }
     out.close();
+
+    std::cout 
+        << "Duration: "    << duration_sec
+        << " | Interval: " << interval_sec
+        << " | Saved: "    << output_file
+        << std::endl;
     return 0;
 }

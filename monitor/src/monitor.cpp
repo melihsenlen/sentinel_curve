@@ -6,7 +6,7 @@
 
 namespace sentinel {
 
-double get_cpu_usage() {
+double cpuUsage() {
     static FILETIME prev_idleTime = {0,0};
     static FILETIME prev_kernelTime = {0,0};
     static FILETIME prev_userTime = {0,0};
@@ -23,14 +23,14 @@ double get_cpu_usage() {
     prev_userTime = userTime;
 
     ULONGLONG total = kernelDiff + userDiff;
-    double cpuPercent = (total - idleDiff) * 100.0 / total;
-    if (cpuPercent < 0.0) cpuPercent = 0.0;
-    if (cpuPercent > 100.0) cpuPercent = 100.0;
+    double cpu = (total - idleDiff) * 100.0 / total;
+    if (cpu < 0.0) cpu = 0.0;
+    if (cpu > 100.0) cpu = 100.0;
 
-    return cpuPercent;
+    return cpu;
 }
 
-double get_mem_usage() {
+double memoryUsage() {
     MEMORYSTATUSEX memInfo;
     memInfo.dwLength = sizeof(MEMORYSTATUSEX);
     if (!GlobalMemoryStatusEx(&memInfo)) return 0.0;
@@ -39,14 +39,14 @@ double get_mem_usage() {
     return static_cast<double>(used) / (1024 * 1024);
 }
 
-Sample collect_sample() {
+Sample collectSample() {
     Sample s;
 
     auto now = std::chrono::system_clock::now();
     s.timestamp = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-    s.cpu_percent = get_cpu_usage();
-    s.mem_mb = get_mem_usage();
+    s.cpu = cpuUsage();
+    s.memory = memoryUsage();
 
     return s;
 }
@@ -54,8 +54,8 @@ Sample collect_sample() {
 std::string to_csv(const Sample& sample) {
     std::ostringstream ss;
     ss << sample.timestamp << ","
-       << sample.cpu_percent << ","
-       << sample.mem_mb;
+       << sample.cpu << ","
+       << sample.memory;
     return ss.str();
 }
 }

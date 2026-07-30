@@ -13,9 +13,9 @@ class Trainer:
         csv_path = data(self.config)["csv_path"]
         print(f"Reading: {csv_path}")
 
-        self.reader = DataReader(csv_path, data(self.config)["window_size"])
+        self.reader = DataReader(data(self.config))
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = RegressionModel(input_size=2).to(self.device)
+        self.model = RegressionModel().to(self.device)
 
     def _build(self) -> DataLoader:
         X, y = self.reader.create_sequences()
