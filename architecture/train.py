@@ -10,12 +10,12 @@ from architecture.config import load_config, data, training, output
 class Trainer:
     def __init__(self):
         self.config = load_config()
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.reader = DataReader(data(self.config))
+        self.model = RegressionModel().to(self.device)
+
         csv_path = data(self.config)["csv_path"]
         print(f"Reading: {csv_path}")
-
-        self.reader = DataReader(data(self.config))
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = RegressionModel().to(self.device)
 
     def _build(self) -> DataLoader:
         X, y = self.reader.create_sequences()

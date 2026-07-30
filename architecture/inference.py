@@ -16,7 +16,7 @@ class Inferencer:
 
     def _load_model(self) -> RegressionModel:
         model_path = output(self.config)["model_path"]
-        model = RegressionModel(input_dim=2).to(self.device)
+        model = RegressionModel().to(self.device)
         model.load_state_dict(torch.load(model_path, map_location=self.device, weights_only=True))
         print(f"Model loaded <-- {model_path}")
         return model
@@ -44,11 +44,11 @@ class Inferencer:
 
     def save(self, predictions: np.ndarray) -> None:
         output_path = output(self.config)["predictions_path"]
-        n_historical = len(predictions) - inference(self.config)["future"]
+        historical = len(predictions) - inference(self.config)["future"]
 
         df = pd.DataFrame(predictions, columns=["cpu", "memory"])
         df.insert(0, "timestep", range(len(df)))
-        df["forecast"] = df["timestep"] >= n_historical
+        df["forecast"] = df["timestep"] >= historical
 
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(output_path, index=False)
