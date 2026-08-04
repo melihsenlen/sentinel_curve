@@ -5,28 +5,32 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from architecture.data import DataReader
 from architecture.model import RegressionModel
-from architecture.config import load_config, data, training, output
+from architecture.config import Config
+
 
 class Trainer:
     def __init__(self):
-        self.config = load_config()
+        self.config = Config()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.reader = DataReader(data(self.config))
-        self.model = RegressionModel().to(self.device)
+        self.reader = DataReader(self.config.data)
+        self.model  = RegressionModel().to(self.device)
 
-        csv_path = data(self.config)["csv_path"]
+        csv_path = self.config.data["csv_path"]
         print(f"Reading: {csv_path}")
 
     def _build(self) -> DataLoader:
         X, y = self.reader.create_sequences()
-        dataset = TensorDataset(torch.from_numpy(X), torch.from_numpy(y))
-        return DataLoader(dataset, batch_size=training(self.config)["batch_size"], shuffle=True)
+        return DataLoader(
+            TensorDataset(torch.from_numpy(X), torch.from_numpy(y)), # dataset
+            batch_size=self.config.training["batch_size"],
+            shuffle=True
+        )
 
     def train(self) -> None:
         dataloader = self._build()
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=training(self.config)["lr"])
-        criterion = nn.MSELoss()
-        epochs = training(self.config)["epochs"]
+        optimizer  = torch.optim.Adam(self.model.parameters(), lr=self.config.training["lr"])
+        criterion  = nn.MSELoss()
+        epochs     = self.config.training["epochs"]
 
         self.model.train()
         for epoch in range(epochs):
@@ -46,7 +50,7 @@ class Trainer:
         return total_loss / len(dataloader.dataset)
 
     def save_model(self) -> None:
-        model_path = output(self.config)["model_path"]
+        model_path = self.config.output["model_path"]
         Path(model_path).parent.mkdir(parents=True, exist_ok=True)
         torch.save(self.model.state_dict(), model_path)
         print(f"Model saved --> {model_path}")

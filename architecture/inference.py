@@ -5,26 +5,28 @@ from pathlib import Path
 
 from architecture.data import DataReader
 from architecture.model import RegressionModel
-from architecture.config import load_config, data, output, inference
+from architecture.config import Config
+
 
 class Inferencer:
     def __init__(self):
-        self.config = load_config()
+        self.config = Config()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.reader = DataReader(data(self.config))
-        self.model = self._load_model()
+        self.reader = DataReader(self.config.data)
+        self.model  = self._load_model()
 
     def _load_model(self) -> RegressionModel:
-        model_path = output(self.config)["model_path"]
-        model = RegressionModel().to(self.device)
+        model_path = self.config.output["model_path"]
+        model      = RegressionModel().to(self.device)
+
         model.load_state_dict(torch.load(model_path, map_location=self.device, weights_only=True))
         print(f"Model loaded <-- {model_path}")
         return model
 
     def predict(self) -> np.ndarray:
-        X, _ = self.reader.create_sequences()
-        future = inference(self.config)["future"]
-        noise = inference(self.config)["noise"]
+        X, _   = self.reader.create_sequences()
+        future = self.config.inference["future"]
+        noise  = self.config.inference["noise"]
 
         self.model.eval()
         predictions = []
@@ -43,8 +45,8 @@ class Inferencer:
         return self.reader.inverse_transform(np.array(predictions))
 
     def save(self, predictions: np.ndarray) -> None:
-        output_path = output(self.config)["predictions_path"]
-        historical = len(predictions) - inference(self.config)["future"]
+        output_path = self.config.output["predictions_path"]
+        historical  = len(predictions) - self.config.inference["future"]
 
         df = pd.DataFrame(predictions, columns=["cpu", "memory"])
         df.insert(0, "timestep", range(len(df)))

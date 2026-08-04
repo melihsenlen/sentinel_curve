@@ -3,13 +3,13 @@ data:
   window_size: 5 # number of past time steps to use for prediction
 
 training:
-  batch_size: 32
+  batch_size: 16
   epochs: 50
   lr: 0.001
 
 inference:
   future: 50 # number of future time steps to predict
-  noise: 0.01
+  noise: 0.005
 
 output:
   model_path: "output/model.pt"

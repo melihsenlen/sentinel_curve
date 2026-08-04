@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+
 class DataReader: 
     def __init__(self, data: dict):
         self.csv_path = data["csv_path"]
